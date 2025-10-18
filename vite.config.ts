@@ -3,8 +3,10 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 export default defineConfig({
+  root: "./client",
   build: {
-    outDir: "dist/client",
+    outDir: "../dist/client",
+    emptyOutDir: true,
   },
   plugins: [react()],
   resolve: {
