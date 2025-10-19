@@ -45,6 +45,13 @@ class ApiClient {
         credentials: 'include', // Important for CORS with credentials
       });
 
+      // Check if response is HTML (error page)
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('text/html')) {
+        const text = await response.text();
+        throw new Error(`Server returned HTML: ${text.substring(0, 100)}...`);
+      }
+
       // Handle ngrok blocking
       if (response.status === 403) {
         const text = await response.text();
@@ -156,26 +163,26 @@ class ApiClient {
     if (filters?.featured) params.append('featured', 'true');
     if (filters?.search) params.append('search', filters.search);
 
-    return this.request<EducationalContent[]>(`/education?${params}`);
+    return this.request<EducationalContent[]>(`/api/education?${params}`);
   }
 
   async getEducationalContentById(id: string): Promise<EducationalContent> {
-    return this.request<EducationalContent>(`/education/${id}`);
+    return this.request<EducationalContent>(`/api/education/${id}`);
   }
 
   async getEducationCategories(): Promise<string[]> {
-    return this.request<string[]>("/education/categories");
+    return this.request<string[]>("/api/education/categories");
   }
 
   async updateUserProgress(contentId: string, progress: Partial<UserProgress>): Promise<UserProgress> {
-    return this.request<UserProgress>(`/education/${contentId}/progress`, {
+    return this.request<UserProgress>(`/api/education/${contentId}/progress`, {
       method: 'PUT',
       body: JSON.stringify(progress),
     });
   }
 
   async getUserProgress(): Promise<UserProgress[]> {
-    return this.request<UserProgress[]>("/education/user/progress");
+    return this.request<UserProgress[]>("/api/education/user/progress");
   }
 }
 
