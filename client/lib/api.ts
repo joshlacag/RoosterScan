@@ -15,7 +15,7 @@ import {
 } from "../../shared/api";
 import { getSession } from "./auth";
 
-const API_BASE = "/api";
+const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
 class ApiClient {
   async request<T>(
@@ -23,8 +23,9 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const session = await getSession();
-    const headers: HeadersInit = {
+       const headers: HeadersInit = {
       "Content-Type": "application/json",
+      "ngrok-skip-browser-warning": "true",
       ...options.headers,
     };
 
