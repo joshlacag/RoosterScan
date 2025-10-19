@@ -23,9 +23,10 @@ class ApiClient {
     options: RequestInit = {}
   ): Promise<T> {
     const session = await getSession();
-       const headers: HeadersInit = {
+    const headers: HeadersInit = {
       "Content-Type": "application/json",
       "ngrok-skip-browser-warning": "true",
+      "User-Agent": "Mozilla/5.0", // Add user-agent to bypass ngrok blocking
       ...options.headers,
     };
 
@@ -34,18 +35,45 @@ class ApiClient {
       headers["Authorization"] = `Bearer ${session.access_token}`;
     }
 
-    const response = await fetch(`${API_BASE}${endpoint}`, {
-      ...options,
-      headers,
-    });
+    // Ensure the URL is properly formatted
+    const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${endpoint}`;
+    
+    try {
+      const response = await fetch(url, {
+        ...options,
+        headers,
+        credentials: 'include', // Important for CORS with credentials
+      });
 
-    if (!response.ok) {
-      const error: ApiError = await response.json();
-      throw new Error(error.error || `HTTP ${response.status}`);
+      // Handle ngrok blocking
+      if (response.status === 403) {
+        const text = await response.text();
+        if (text.includes('Blocked request')) {
+          throw new Error('Blocked by ngrok: ' + text);
+        }
+      }
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        try {
+          const error = JSON.parse(errorText) as ApiError;
+          throw new Error(error.error || `HTTP ${response.status}`);
+        } catch (e) {
+          throw new Error(errorText || `HTTP ${response.status}`);
+        }
+      }
+
+      // Handle empty responses
+      if (response.status === 204) {
+        return null as unknown as T;
+      }
+
+      const result: ApiResponse<T> = await response.json();
+      return result.data;
+    } catch (error) {
+      console.error('API Request failed:', error);
+      throw error;
     }
-
-    const result: ApiResponse<T> = await response.json();
-    return result.data;
   }
 
   // Rooster methods
@@ -112,20 +140,11 @@ class ApiClient {
     const formData = new FormData();
     formData.append('image', file);
     
-    const response = await fetch(`${API_BASE}/upload`, {
+    // Use the request method to include all headers
+    return this.request<{ url: string }>("/upload", {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer dev-token`
-      },
       body: formData
     });
-    
-    if (!response.ok) {
-      throw new Error('Failed to upload image');
-    }
-    
-    const result = await response.json();
-    return result.data;
   }
 
   // Educational Content API methods
@@ -137,86 +156,26 @@ class ApiClient {
     if (filters?.featured) params.append('featured', 'true');
     if (filters?.search) params.append('search', filters.search);
 
-    const session = await getSession();
-    const response = await fetch(`${API_BASE}/education?${params}`, {
-      headers: {
-        "Authorization": `Bearer ${session?.access_token || ''}`
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch educational content');
-    }
-    
-    const result = await response.json();
-    return result.data;
+    return this.request<EducationalContent[]>(`/education?${params}`);
   }
 
   async getEducationalContentById(id: string): Promise<EducationalContent> {
-    const session = await getSession();
-    const response = await fetch(`${API_BASE}/education/${id}`, {
-      headers: {
-        "Authorization": `Bearer ${session?.access_token || ''}`
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch educational content');
-    }
-    
-    const result = await response.json();
-    return result.data;
+    return this.request<EducationalContent>(`/education/${id}`);
   }
 
   async getEducationCategories(): Promise<string[]> {
-    const session = await getSession();
-    const response = await fetch(`${API_BASE}/education/categories`, {
-      headers: {
-        "Authorization": `Bearer ${session?.access_token || ''}`
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch categories');
-    }
-    
-    const result = await response.json();
-    return result.data;
+    return this.request<string[]>("/education/categories");
   }
 
   async updateUserProgress(contentId: string, progress: Partial<UserProgress>): Promise<UserProgress> {
-    const session = await getSession();
-    const response = await fetch(`${API_BASE}/education/${contentId}/progress`, {
+    return this.request<UserProgress>(`/education/${contentId}/progress`, {
       method: 'PUT',
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${session?.access_token || ''}`
-      },
       body: JSON.stringify(progress),
     });
-    
-    if (!response.ok) {
-      throw new Error('Failed to update progress');
-    }
-    
-    const result = await response.json();
-    return result.data;
   }
 
   async getUserProgress(): Promise<UserProgress[]> {
-    const session = await getSession();
-    const response = await fetch(`${API_BASE}/education/user/progress`, {
-      headers: {
-        "Authorization": `Bearer ${session?.access_token || ''}`
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch user progress');
-    }
-    
-    const result = await response.json();
-    return result.data;
+    return this.request<UserProgress[]>("/education/user/progress");
   }
 }
 
