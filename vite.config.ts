@@ -5,12 +5,18 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  root: "./client",
-  publicDir: "../public",
   server: {
     host: "::",
     port: 8080,
     strictPort: true,
+    allowedHosts: [
+      '.ngrok-free.dev', // Allow all ngrok domains
+      '.ngrok.io',
+      'localhost',
+      '127.0.0.1',
+      'rooster-scan.vercel.app',
+      'rooster-scan-*.vercel.app'
+    ],
     proxy: {
       '/api': {
         target: 'http://localhost:8080',
@@ -34,13 +40,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    outDir: "../dist/client",
-    emptyOutDir: true,
-    rollupOptions: {
-      input: {
-        main: path.resolve(__dirname, "client/index.html")
-      }
-    }
+    outDir: "dist/client",
   },
   plugins: [react(), mode === 'development' ? expressPlugin() : null].filter(Boolean),
   resolve: {
@@ -51,15 +51,17 @@ export default defineConfig(({ mode }) => ({
   },
 }));
 
-function expressPlugin() {
+function expressPlugin(): any {
   return {
-    name: 'express-plugin',
-    configureServer(server) {
-      server.middlewares.use((req, res, next) => {
-        res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-        res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-        next();
-      });
-    }
+    name: "express-plugin",
+    apply: "serve", // Only apply during development (serve mode)
+    async configureServer(server) {
+      // Only import server in development mode
+      const { createServer } = await import("./server");
+      const app = createServer();
+
+      // Add Express app as middleware to Vite dev server
+      server.middlewares.use(app);
+    },
   };
 }
