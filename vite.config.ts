@@ -5,6 +5,8 @@ import path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
+  root: "./client",
+  publicDir: "../public",
   server: {
     host: "::",
     port: 8080,
@@ -40,7 +42,11 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    outDir: "dist/client",
+    outDir: "../dist/client",
+    emptyOutDir: true,
+    rollupOptions: {
+      input: path.resolve(__dirname, "client/index.html")
+    }
   },
   plugins: [react(), mode === 'development' ? expressPlugin() : null].filter(Boolean),
   resolve: {
