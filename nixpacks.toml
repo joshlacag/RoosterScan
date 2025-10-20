@@ -1,5 +1,4 @@
-[providers]
-node = true
+providers = ["node"]
 
 [variables]
 NODE_VERSION = "18"
@@ -7,7 +6,7 @@ NODE_VERSION = "18"
 [phases.install]
 cmd = "npm install --legacy-peer-deps"
 
-[phases.build]
+[phases.build] 
 cmd = "npm run build"
 
 [start]
