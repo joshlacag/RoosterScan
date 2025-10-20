@@ -146,46 +146,6 @@ router.post('/detect', upload.single('image'), async (req, res) => {
       });
     }
 
-    // TEMPORARY: Return mock data immediately to fix frontend
-    return res.json({
-      success: true,
-      keypoints: [
-        { name: 'beak_tip', x: 100, y: 50, confidence: 0.9 },
-        { name: 'eye', x: 120, y: 60, confidence: 0.85 },
-        { name: 'comb_top', x: 110, y: 30, confidence: 0.8 },
-        { name: 'neck_base', x: 130, y: 80, confidence: 0.75 },
-        { name: 'left_foot', x: 90, y: 200, confidence: 0.8 },
-        { name: 'right_foot', x: 150, y: 200, confidence: 0.8 }
-      ],
-      confidence: 0.85,
-      pose_confidence: 0.85,
-      health_assessment: 'healthy',
-      recommendations: [
-        'Rooster appears healthy based on pose analysis',
-        'Continue regular health monitoring',
-        'Ensure proper nutrition and clean environment'
-      ],
-      combined_analysis: {
-        health_assessment: 'healthy',
-        combined_confidence: 0.85,
-        recommendations: [
-          'Rooster appears healthy based on pose analysis',
-          'Continue regular health monitoring',
-          'Ensure proper nutrition and clean environment'
-        ],
-        specific_findings: []
-      },
-      injury_analysis: {
-        risk_level: 'low',
-        detected_issues: [],
-        recommendations: [
-          'Rooster appears healthy based on pose analysis',
-          'Continue regular health monitoring',
-          'Ensure proper nutrition and clean environment'
-        ]
-      }
-    });
-
     const imagePath = req.file.path;
     const modelPath = path.join(__dirname, '../../rooster_pose_model.pt');
 
@@ -194,7 +154,7 @@ router.post('/detect', upload.single('image'), async (req, res) => {
       console.log('Model not found at:', modelPath);
       console.log('Directory contents:', fs.readdirSync(path.join(__dirname, '../..')));
       
-      // Return mock data for now to test the frontend
+      // Return mock data when models not found
       return res.json({
         success: true,
         keypoints: [
@@ -206,17 +166,27 @@ router.post('/detect', upload.single('image'), async (req, res) => {
         pose_confidence: 0.85,
         health_assessment: 'healthy',
         recommendations: [
-          'Mock analysis - AI models not available in production environment',
+          'AI models not deployed - showing mock data',
           'Upload successful - frontend integration working',
-          'Deploy AI models to enable full analysis'
+          'Deploy AI models to Railway to enable real analysis'
         ],
+        combined_analysis: {
+          health_assessment: 'healthy',
+          combined_confidence: 0.85,
+          recommendations: [
+            'AI models not deployed - showing mock data',
+            'Upload successful - frontend integration working',
+            'Deploy AI models to Railway to enable real analysis'
+          ],
+          specific_findings: []
+        },
         injury_analysis: {
           risk_level: 'low',
           detected_issues: [],
           recommendations: [
-            'Mock analysis - AI models not available in production environment',
+            'AI models not deployed - showing mock data',
             'Upload successful - frontend integration working',
-            'Deploy AI models to enable full analysis'
+            'Deploy AI models to Railway to enable real analysis'
           ]
         }
       });
