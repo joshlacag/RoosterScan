@@ -10,4 +10,4 @@ cmd = "npm install --legacy-peer-deps"
 cmd = "npm run build"
 
 [start]
-cmd = "npm run start:production"
+cmd = "npm start"
