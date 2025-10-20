@@ -4,11 +4,11 @@ import express from "express";
 import { fileURLToPath } from "url";
 
 const app = createServer();
-const port = process.env.PORT || 3000;
+const port = parseInt(process.env.PORT || "3000", 10);
 
 // In production, serve the built SPA files
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const distPath = path.join(__dirname, "../spa");
+const distPath = path.join(__dirname, "../dist/client");
 
 // Serve static files
 app.use(express.static(distPath));
@@ -23,7 +23,7 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(distPath, "index.html"));
 });
 
-app.listen(port, () => {
+app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 RoosterCXRAY server running on port ${port}`);
   console.log(`📱 Frontend: http://localhost:${port}`);
   console.log(`🔧 API: http://localhost:${port}/api`);
