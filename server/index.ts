@@ -12,10 +12,41 @@ import poseRoutes from "./routes/pose";
 export function createServer() {
   const app = express();
 
-  // Middleware
-  app.use(cors());
+  // CORS Middleware
+  app.use((req, res, next) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:8080',
+      'https://rooster-scan.vercel.app',
+      'https://rooster-scan-git-main-josh-lacags-projects.vercel.app',
+      'https://rooster-scan-fej9guyqx-josh-lacags-projects.vercel.app',
+      /rooster-scan-.*-josh-lacags-projects\.vercel\.app$/,
+      /ngrok-free\.dev$/
+    ];
+    
+    const origin = req.headers.origin || '';
+    if (allowedOrigins.some(o => o instanceof RegExp ? o.test(origin) : o === origin)) {
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, ngrok-skip-browser-warning');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    
+    // Handle preflight
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+    
+    next();
+  });
   app.use(express.json({ limit: '50mb' })); // Increased limit for base64 images
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+  // Health check route
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", timestamp: new Date().toISOString() });
+  });
 
   // Auth routes
   app.get("/api/auth/session", getSession);
