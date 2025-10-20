@@ -27,6 +27,10 @@ dist-ssr
 !.env
 
 # AI Model files (too large for GitHub)
+# Allow essential models
+!rooster_pose_model.pt
+!rooster_bumblefoot_model.pt
+# Block everything else
 *.pt
 dataset/
 bumblefoot_classification/
