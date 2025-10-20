@@ -147,7 +147,7 @@ router.post('/detect', upload.single('image'), async (req, res) => {
     }
 
     const imagePath = req.file.path;
-    const modelPath = path.join(__dirname, '../../rooster_pose_model.pt');
+    const modelPath = path.join(process.cwd(), 'rooster_pose_model.pt');
 
     // Check if model exists
     if (!fs.existsSync(modelPath)) {
@@ -193,8 +193,8 @@ router.post('/detect', upload.single('image'), async (req, res) => {
     }
 
     // Check if bumblefoot model exists (using the perfect 100% accuracy model)
-    const bumblefootModelPath = path.join(__dirname, '../../rooster_bumblefoot_model.pt');
-    const sequentialScriptPath = path.join(__dirname, '../scripts/sequential_analysis.py');
+    const bumblefootModelPath = path.join(process.cwd(), 'rooster_bumblefoot_model.pt');
+    const sequentialScriptPath = path.join(process.cwd(), 'server/scripts/sequential_analysis.py');
     
     if (!fs.existsSync(bumblefootModelPath)) {
       return res.status(500).json({
