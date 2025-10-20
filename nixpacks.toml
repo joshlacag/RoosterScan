@@ -1,7 +1,8 @@
 providers = ["node"]
 
 [variables]
-NODE_VERSION = "20"
+NODE_VERSION = "20.x"
+NIXPACKS_NODE_VERSION = "20"
 
 [phases.install]
 cmd = "npm install --legacy-peer-deps"
