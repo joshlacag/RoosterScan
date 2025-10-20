@@ -6,6 +6,6 @@
   },
   "deploy": {
     "startCommand": "npm run start:production",
-    "healthcheckPath": "/api/health"
+    "healthcheckPath": "/health"
   }
 }
