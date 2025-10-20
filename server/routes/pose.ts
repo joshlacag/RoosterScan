@@ -163,10 +163,21 @@ router.post('/detect', upload.single('image'), async (req, res) => {
           { name: 'comb_top', x: 110, y: 30, confidence: 0.8 }
         ],
         confidence: 0.85,
+        pose_confidence: 0.85,
+        health_assessment: 'healthy',
+        recommendations: [
+          'Mock analysis - AI models not available in production environment',
+          'Upload successful - frontend integration working',
+          'Deploy AI models to enable full analysis'
+        ],
         injury_analysis: {
           risk_level: 'low',
           detected_issues: [],
-          recommendations: ['Mock analysis - models not available in production']
+          recommendations: [
+            'Mock analysis - AI models not available in production environment',
+            'Upload successful - frontend integration working',
+            'Deploy AI models to enable full analysis'
+          ]
         }
       });
     }
