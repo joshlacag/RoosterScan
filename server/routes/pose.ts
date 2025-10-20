@@ -165,6 +165,16 @@ router.post('/detect', upload.single('image'), async (req, res) => {
         'Continue regular health monitoring',
         'Ensure proper nutrition and clean environment'
       ],
+      combined_analysis: {
+        health_assessment: 'healthy',
+        combined_confidence: 0.85,
+        recommendations: [
+          'Rooster appears healthy based on pose analysis',
+          'Continue regular health monitoring',
+          'Ensure proper nutrition and clean environment'
+        ],
+        specific_findings: []
+      },
       injury_analysis: {
         risk_level: 'low',
         detected_issues: [],
