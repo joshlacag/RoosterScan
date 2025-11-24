@@ -1,0 +1,204 @@
+/** @import must precede all other statements */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /**
+   * Tailwind CSS theme
+   * tailwind.config.ts expects the following color variables to be expressed as HSL values.
+   * A different format will require also updating the theme in tailwind.config.ts.
+  */
+  :root {
+    --background: 35 100% 98%;
+    --foreground: 24 15% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 24 15% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 15% 12%;
+
+    --primary: 358 72% 52%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 35 92% 96%;
+    --secondary-foreground: 24 20% 20%;
+
+    --muted: 30 30% 96%;
+    --muted-foreground: 24 10% 40%;
+
+    --accent: 42 100% 92%;
+    --accent-foreground: 24 20% 20%;
+
+    --destructive: 0 84% 55%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 24 25% 88%;
+    --input: 24 25% 88%;
+    --ring: 358 72% 52%;
+
+    --brand-start: 358 80% 54%;
+    --brand-end: 24 90% 54%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 35 40% 98%;
+    --sidebar-foreground: 24 15% 20%;
+    --sidebar-primary: 358 72% 52%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 42 100% 92%;
+    --sidebar-accent-foreground: 24 20% 20%;
+    --sidebar-border: 24 25% 88%;
+    --sidebar-ring: 358 72% 52%;
+  }
+
+  .dark {
+    --background: 24 15% 6%;
+    --foreground: 30 20% 96%;
+
+    --card: 24 15% 8%;
+    --card-foreground: 30 20% 96%;
+
+    --popover: 24 15% 8%;
+    --popover-foreground: 30 20% 96%;
+
+    --primary: 358 72% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 24 10% 14%;
+    --secondary-foreground: 150 20% 96%;
+
+    --muted: 24 10% 14%;
+    --muted-foreground: 28 12% 70%;
+
+    --accent: 30 12% 16%;
+    --accent-foreground: 30 20% 96%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 24 10% 18%;
+    --input: 24 10% 18%;
+    --ring: 358 72% 60%;
+
+    --brand-start: 358 80% 60%;
+    --brand-end: 24 90% 58%;
+
+    --sidebar-background: 24 15% 6%;
+    --sidebar-foreground: 30 20% 96%;
+    --sidebar-primary: 358 72% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 30 12% 16%;
+    --sidebar-accent-foreground: 30 20% 96%;
+    --sidebar-border: 24 10% 18%;
+    --sidebar-ring: 358 72% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  /* Fade in animations */
+  .fade-in {
+    animation: fadeIn 0.3s ease-in;
+  }
+  
+  .fade-in-slow {
+    animation: fadeIn 0.5s ease-in;
+  }
+  
+  .fade-out {
+    animation: fadeOut 0.2s ease-out;
+  }
+  
+  .slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+  
+  .slide-down {
+    animation: slideDown 0.4s ease-out;
+  }
+  
+  /* Stagger animations for lists */
+  .stagger-item {
+    animation: fadeInUp 0.5s ease-out backwards;
+  }
+  
+  .stagger-item:nth-child(1) { animation-delay: 0.05s; }
+  .stagger-item:nth-child(2) { animation-delay: 0.1s; }
+  .stagger-item:nth-child(3) { animation-delay: 0.15s; }
+  .stagger-item:nth-child(4) { animation-delay: 0.2s; }
+  .stagger-item:nth-child(5) { animation-delay: 0.25s; }
+  .stagger-item:nth-child(6) { animation-delay: 0.3s; }
+  .stagger-item:nth-child(7) { animation-delay: 0.35s; }
+  .stagger-item:nth-child(8) { animation-delay: 0.4s; }
+  .stagger-item:nth-child(9) { animation-delay: 0.45s; }
+  .stagger-item:nth-child(10) { animation-delay: 0.5s; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
