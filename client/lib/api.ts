@@ -15,7 +15,10 @@ import {
 } from "../../shared/api";
 import { getSession } from "./auth";
 
-const API_BASE = import.meta.env.VITE_API_URL || "/api";
+// Use absolute URL in production to avoid domain confusion, relative in development
+const API_BASE = import.meta.env.PROD 
+  ? "https://roosterscan-latest.onrender.com/api"
+  : (import.meta.env.VITE_API_URL || "/api");
 
 class ApiClient {
   private cache = new Map<string, { data: any; timestamp: number }>();
