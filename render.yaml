@@ -11,7 +11,9 @@ services:
         value: production
       - key: PORT
         value: 10000
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_ANON_KEY
-        sync: false
+      - key: VITE_SUPABASE_URL
+        value: https://gejsbfhgexnxrabksdhx.supabase.co
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlanNiZmhnZXhueHJhYmtzZGh4Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1NzUwMTkyMiwiZXhwIjoyMDczMDc3OTIyfQ.7v3A268nBGONvuREw_CT6k_MV2tEdE_9aqhhpEtII0w
+      - key: SUPABASE_JWT_SECRET
+        value: /v1R4QC3XwH7F1A8zx1fu8F5f49zhpbhLTLvkRkqBNtSftS80+O/u1ogVCBeV3zHNIj35Xt3xScyQ6YteGegKA==
