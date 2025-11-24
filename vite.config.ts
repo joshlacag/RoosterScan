@@ -16,8 +16,7 @@ export default defineConfig(({ mode }) => ({
       '.ngrok.io',
       'localhost',
       '127.0.0.1',
-      'rooster-scan.vercel.app',
-      'rooster-scan-*.vercel.app'
+      'roosterscan-latest.onrender.com'
     ],
     proxy: {
       '/api': {
@@ -30,8 +29,7 @@ export default defineConfig(({ mode }) => ({
     cors: {
       origin: [
         'http://localhost:5173',
-        'https://rooster-scan.vercel.app',
-        'https://rooster-scan-*.vercel.app',
+        'https://roosterscan-latest.onrender.com',
         'https://*.ngrok-free.dev'
       ],
       credentials: true

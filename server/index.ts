@@ -17,10 +17,7 @@ export function createServer() {
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:8080',
-      'https://rooster-scan.vercel.app',
-      'https://rooster-scan-git-main-josh-lacags-projects.vercel.app',
-      'https://rooster-scan-fej9guyqx-josh-lacags-projects.vercel.app',
-      /rooster-scan-.*-josh-lacags-projects\.vercel\.app$/,
+      'https://roosterscan-latest.onrender.com',
       /ngrok-free\.dev$/
     ];
     
