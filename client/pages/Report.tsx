@@ -109,24 +109,24 @@ export default function Report() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="space-y-4 sm:flex sm:items-center sm:justify-between sm:space-y-0">
         <div className="flex items-center gap-3">
           <FileText className="h-8 w-8 text-primary" />
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Health Assessment Report</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Health Assessment Report</h1>
             <p className="text-muted-foreground">AI-Powered Rooster Health Analysis</p>
           </div>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
+        <div className="flex flex-wrap gap-2">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <Printer className="h-4 w-4 mr-2" />
             Print
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <Download className="h-4 w-4 mr-2" />
             Export PDF
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>

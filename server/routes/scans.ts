@@ -256,3 +256,55 @@ export const createScan: RequestHandler = async (req, res) => {
     res.status(500).json(apiError);
   }
 };
+
+export const deleteScan: RequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = getUserIdFromAuth(req.headers.authorization);
+    
+    const { error } = await supabase
+      .from('scans')
+      .delete()
+      .eq('id', id)
+      .eq('user_id', userId);
+    
+    if (error) {
+      throw error;
+    }
+
+    const response: ApiResponse<{ deleted: boolean }> = {
+      data: { deleted: true },
+      success: true
+    };
+    res.json(response);
+  } catch (error) {
+    console.error('Failed to delete scan:', error);
+    const apiError: ApiError = { error: "Failed to delete scan", success: false };
+    res.status(500).json(apiError);
+  }
+};
+
+export const clearAllScans: RequestHandler = async (req, res) => {
+  try {
+    const userId = getUserIdFromAuth(req.headers.authorization);
+    
+    const { error } = await supabase
+      .from('scans')
+      .delete()
+      .eq('user_id', userId);
+    
+    if (error) {
+      throw error;
+    }
+
+    const response: ApiResponse<{ cleared: boolean }> = {
+      data: { cleared: true },
+      success: true
+    };
+    res.json(response);
+  } catch (error) {
+    console.error('Failed to clear scans:', error);
+    const apiError: ApiError = { error: "Failed to clear scans", success: false };
+    res.status(500).json(apiError);
+  }
+};

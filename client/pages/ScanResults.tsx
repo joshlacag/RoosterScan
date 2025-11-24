@@ -895,16 +895,16 @@ export default function ScanResults() {
       )}
 
       {/* Actions */}
-      <div className="flex gap-4 pt-6">
-        <Button onClick={() => navigate('/history')} variant="outline">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6">
+        <Button onClick={() => navigate('/history')} variant="outline" className="w-full sm:w-auto">
           <ArrowLeft className="h-4 w-4 mr-2" />
           View All Scans
         </Button>
-        <Button onClick={() => navigate('/pose')}>
+        <Button onClick={() => navigate('/pose')} className="w-full sm:w-auto">
           Analyze Another Rooster
         </Button>
-        <Link to={`/report/${scan.id}`}>
-          <Button variant="outline">
+        <Link to={`/report/${scan.id}`} className="w-full sm:w-auto">
+          <Button variant="outline" className="w-full">
             View Report
           </Button>
         </Link>

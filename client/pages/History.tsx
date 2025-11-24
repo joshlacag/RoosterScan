@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Download, FolderOpen, Calendar, Clock, Activity, RefreshCw } from "lucide-react";
+import { Download, FolderOpen, Calendar, Clock, Activity, RefreshCw, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { Scan, HealthReport, Rooster } from "@shared/api";
@@ -45,6 +45,24 @@ export default function History() {
     } catch (error) {
       console.error('Failed to load history data:', error);
       toast.error('Failed to load history data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearAllScans = async () => {
+    if (!confirm('Are you sure you want to delete ALL scans? This cannot be undone.')) {
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      await api.clearAllScans();
+      toast.success('All scans cleared successfully');
+      await loadData(); // Reload data
+    } catch (error) {
+      console.error('Failed to clear scans:', error);
+      toast.error('Failed to clear scans');
     } finally {
       setLoading(false);
     }
@@ -181,6 +199,17 @@ export default function History() {
                 <RefreshCw className={`mr-1 h-4 w-4 ${loading ? 'animate-spin' : ''}`} /> 
                 <span className="hidden sm:inline">Refresh</span>
                 <span className="sm:hidden">Refresh</span>
+              </Button>
+              <Button 
+                onClick={clearAllScans} 
+                variant="destructive" 
+                size="sm"
+                disabled={loading}
+                className="flex-1 sm:flex-none"
+              >
+                <Trash2 className="mr-1 h-4 w-4" /> 
+                <span className="hidden sm:inline">Clear All</span>
+                <span className="sm:hidden">Clear</span>
               </Button>
               <Button asChild variant="outline" size="sm" className="flex-1 sm:flex-none">
                 <Link to="/pose">

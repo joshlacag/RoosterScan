@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import { getRoosters, createRooster, updateRooster, deleteRooster } from './routes/roosters';
 import { uploadImage, uploadMiddleware } from './routes/upload';
-import { getScans, getScanById, createScan } from "./routes/scans";
+import { getScans, getScanById, createScan, deleteScan, clearAllScans } from "./routes/scans";
 import { getReports, createReport } from "./routes/reports";
 import { getSession, requireAuth } from "./routes/auth";
 import educationRoutes from "./routes/education";
@@ -61,6 +61,8 @@ export function createServer() {
   app.get("/api/scans", getScans);
   app.get("/api/scans/:id", getScanById);
   app.post("/api/scans", requireAuth, createScan);
+  app.delete("/api/scans/:id", requireAuth, deleteScan);
+  app.delete("/api/scans", requireAuth, clearAllScans);
 
   // Report routes
   app.get("/api/reports", getReports);

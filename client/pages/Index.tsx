@@ -5,14 +5,32 @@ import RoosterPoseVisualization from "@/components/RoosterPoseVisualization";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import { Scan } from "@shared/api";
+import { isAuthenticated } from "@/lib/auth";
 
 export default function Index() {
   const [scans, setScans] = useState<Scan[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userAuthenticated, setUserAuthenticated] = useState(false);
 
   useEffect(() => {
-    loadScans();
+    checkAuthAndLoadScans();
   }, []);
+
+  const checkAuthAndLoadScans = async () => {
+    try {
+      const authenticated = await isAuthenticated();
+      setUserAuthenticated(authenticated);
+      
+      if (authenticated) {
+        await loadScans();
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error('Auth check failed:', error);
+      setLoading(false);
+    }
+  };
 
   const loadScans = async () => {
     try {
@@ -105,38 +123,63 @@ export default function Index() {
               Each scan generates a structured assessment including detected abnormalities, severity hints, and recommendations. Track progress over time and export to share with vets or keep records.
             </p>
             <div className="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-3">
-              <Button asChild className="w-full sm:w-auto">
-                <Link to="/history"><Activity className="mr-2 h-4 w-4"/> View Reports</Link>
-              </Button>
-              <Button variant="outline" asChild className="w-full sm:w-auto">
-                <Link to="/pose">Analyze Rooster</Link>
-              </Button>
+              {userAuthenticated ? (
+                <>
+                  <Button asChild className="w-full sm:w-auto">
+                    <Link to="/history"><Activity className="mr-2 h-4 w-4"/> View Reports</Link>
+                  </Button>
+                  <Button variant="outline" asChild className="w-full sm:w-auto">
+                    <Link to="/pose">Analyze Rooster</Link>
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button asChild className="w-full sm:w-auto">
+                    <Link to="/auth">Sign In to View Reports</Link>
+                  </Button>
+                  <Button variant="outline" asChild className="w-full sm:w-auto">
+                    <Link to="/pose">Try Analysis</Link>
+                  </Button>
+                </>
+              )}
             </div>
           </div>
           <div className="md:w-1/2">
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <div className="rounded-xl border p-3 sm:p-4 bg-gradient-to-br from-primary/5 to-transparent">
-                <p className="text-xs text-muted-foreground">Abnormalities</p>
-                <p className="text-xl sm:text-2xl font-bold text-primary">
-                  {loading ? '...' : abnormalitiesCount}
-                </p>
+            {userAuthenticated ? (
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <div className="rounded-xl border p-3 sm:p-4 bg-gradient-to-br from-primary/5 to-transparent">
+                  <p className="text-xs text-muted-foreground">Abnormalities</p>
+                  <p className="text-xl sm:text-2xl font-bold text-primary">
+                    {loading ? '...' : abnormalitiesCount}
+                  </p>
+                </div>
+                <div className="rounded-xl border p-3 sm:p-4 bg-gradient-to-br from-primary/5 to-transparent">
+                  <p className="text-xs text-muted-foreground">Last Scan</p>
+                  <p className="text-base sm:text-lg font-bold">
+                    {loading ? '...' : lastScan}
+                  </p>
+                </div>
+                <div className="rounded-xl border p-3 sm:p-4 col-span-2">
+                  <p className="text-xs text-muted-foreground mb-1">Summary</p>
+                  <p className="text-xs sm:text-sm">
+                    {loading ? 'Loading...' : 
+                     totalScans === 0 ? 'No scans yet. Upload your first rooster image to get started!' :
+                     `${totalScans} total scan${totalScans !== 1 ? 's' : ''} • ${abnormalitiesCount} with detected issues`
+                    }
+                  </p>
+                </div>
               </div>
-              <div className="rounded-xl border p-3 sm:p-4 bg-gradient-to-br from-primary/5 to-transparent">
-                <p className="text-xs text-muted-foreground">Last Scan</p>
-                <p className="text-base sm:text-lg font-bold">
-                  {loading ? '...' : lastScan}
+            ) : (
+              <div className="rounded-xl border p-4 sm:p-6 bg-gradient-to-br from-muted/50 to-transparent text-center">
+                <Activity className="mx-auto h-8 w-8 text-muted-foreground mb-3" />
+                <p className="text-sm text-muted-foreground mb-3">
+                  Sign in to view your health reports and track your roosters' progress over time.
                 </p>
+                <Button asChild size="sm" className="w-full">
+                  <Link to="/auth">Get Started</Link>
+                </Button>
               </div>
-              <div className="rounded-xl border p-3 sm:p-4 col-span-2">
-                <p className="text-xs text-muted-foreground mb-1">Summary</p>
-                <p className="text-xs sm:text-sm">
-                  {loading ? 'Loading...' : 
-                   totalScans === 0 ? 'No scans yet. Upload your first rooster image to get started!' :
-                   `${totalScans} total scan${totalScans !== 1 ? 's' : ''} • ${abnormalitiesCount} with detected issues`
-                  }
-                </p>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </section>

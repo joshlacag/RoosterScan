@@ -706,10 +706,10 @@ export default function PoseAnalysis() {
           <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-primary to-primary/70 rounded-xl mb-4 shadow">
             <Camera className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h1 className="text-4xl font-extrabold text-foreground mb-3">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground mb-3">
             AI Pose Analysis
           </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
+          <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
             Upload a rooster image for automated pose detection and health analysis
           </p>
           
@@ -1167,7 +1167,7 @@ export default function PoseAnalysis() {
                           {/* Confidence Score */}
                           {(result.combined_analysis?.combined_confidence || result.confidence) && (
                             <div className="text-center sm:text-right flex-shrink-0 pt-3 sm:pt-0 border-t sm:border-t-0 sm:border-l sm:pl-4">
-                              <div className="text-3xl sm:text-4xl font-bold text-foreground mb-1">
+                              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
                                 {((result.combined_analysis?.combined_confidence || result.confidence || 0) * 100).toFixed(0)}%
                               </div>
                               <div className="text-xs text-muted-foreground">Confidence</div>

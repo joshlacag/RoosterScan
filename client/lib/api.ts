@@ -163,6 +163,28 @@ class ApiClient {
     return result;
   }
 
+  async deleteScan(id: string): Promise<{ deleted: boolean }> {
+    const result = await this.request<{ deleted: boolean }>(`/scans/${id}`, {
+      method: "DELETE",
+    });
+    
+    // Clear scans cache so history page refreshes
+    this.clearCacheByPattern("/scans");
+    
+    return result;
+  }
+
+  async clearAllScans(): Promise<{ cleared: boolean }> {
+    const result = await this.request<{ cleared: boolean }>("/scans", {
+      method: "DELETE",
+    });
+    
+    // Clear scans cache so history page refreshes
+    this.clearCacheByPattern("/scans");
+    
+    return result;
+  }
+
   // Report methods
   async getReports(): Promise<HealthReport[]> {
     return this.request<HealthReport[]>("/reports");
