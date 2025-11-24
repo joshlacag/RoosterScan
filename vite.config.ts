@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
       '.ngrok.io',
       'localhost',
       '127.0.0.1',
-      'roosterscan-latest.onrender.com'
+      'roosterscan.onrender.com'
     ],
     proxy: {
       '/api': {
@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => ({
     cors: {
       origin: [
         'http://localhost:5173',
-        'https://roosterscan-latest.onrender.com',
+        'https://roosterscan.onrender.com',
         'https://*.ngrok-free.dev'
       ],
       credentials: true

@@ -17,7 +17,7 @@ import { getSession } from "./auth";
 
 // Use absolute URL in production to avoid domain confusion, relative in development
 const API_BASE = import.meta.env.PROD 
-  ? "https://roosterscan-latest.onrender.com/api"
+  ? "https://roosterscan.onrender.com/api"
   : (import.meta.env.VITE_API_URL || "/api");
 
 class ApiClient {

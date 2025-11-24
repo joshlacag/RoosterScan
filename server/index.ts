@@ -17,7 +17,7 @@ export function createServer() {
     const allowedOrigins = [
       'http://localhost:5173',
       'http://localhost:8080',
-      'https://roosterscan-latest.onrender.com',
+      'https://roosterscan.onrender.com',
       /ngrok-free\.dev$/
     ];
     

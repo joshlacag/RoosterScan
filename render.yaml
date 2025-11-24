@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: roosterscan-api
+    name: roosterscan
     env: node
     region: oregon
     plan: free
