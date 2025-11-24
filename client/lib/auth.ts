@@ -80,6 +80,23 @@ export async function updatePassword(newPassword: string) {
   }
 }
 
+// Sign in with Google
+export async function signInWithGoogle() {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: `${window.location.origin}/auth`
+    }
+  });
+  
+  if (error) {
+    console.error('Google sign in error:', error);
+    throw new Error(error.message || 'Google sign in failed');
+  }
+  
+  return data;
+}
+
 // Sign out
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
