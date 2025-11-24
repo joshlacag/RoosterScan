@@ -82,10 +82,15 @@ export async function updatePassword(newPassword: string) {
 
 // Sign in with Google
 export async function signInWithGoogle() {
+  // Force redirect to production URL to avoid Vercel redirect issues
+  const redirectUrl = import.meta.env.PROD 
+    ? 'https://roosterscan-latest.onrender.com/auth'
+    : `${window.location.origin}/auth`;
+    
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${window.location.origin}/auth`
+      redirectTo: redirectUrl
     }
   });
   
