@@ -21,16 +21,22 @@ export const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 // Helper function to get user ID from JWT token
 export function getUserIdFromAuth(authHeader?: string): string {
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    // Return a valid UUID for development
-    return '00000000-0000-0000-0000-000000000001'
+    throw new Error('No authorization token provided');
   }
   
   try {
-    const token = authHeader.substring(7)
-    // For development, we'll use a simple approach
-    // In production, you'd properly verify the JWT
-    return '00000000-0000-0000-0000-000000000001' // Valid UUID for development
+    const token = authHeader.substring(7);
+    
+    // Decode JWT to get user ID (without verification for now)
+    const payload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    
+    if (!payload.sub) {
+      throw new Error('Invalid token: no user ID found');
+    }
+    
+    return payload.sub;
   } catch (error) {
-    return '00000000-0000-0000-0000-000000000001'
+    console.error('Error decoding auth token:', error);
+    throw new Error('Invalid authorization token');
   }
 }

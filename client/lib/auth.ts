@@ -82,10 +82,16 @@ export async function updatePassword(newPassword: string) {
 
 // Sign in with Google
 export async function signInWithGoogle() {
-  // Always redirect to the correct Render URL to avoid Vercel redirect issues
-  const redirectUrl = import.meta.env.PROD 
-    ? 'https://roosterscan.onrender.com/auth'
-    : `${window.location.origin}/auth`;
+  // Force redirect to correct URL based on environment
+  let redirectUrl;
+  
+  if (import.meta.env.PROD) {
+    // Production: Always go to Render
+    redirectUrl = 'https://roosterscan.onrender.com/auth';
+  } else {
+    // Development: Use localhost
+    redirectUrl = 'http://localhost:8080/auth';
+  }
     
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'google',

@@ -6,8 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
-import { signIn, signUp, resetPassword, updatePassword, signInWithGoogle } from "@/lib/auth";
-import { useState } from "react";
+import { signIn, signUp, resetPassword, updatePassword, signInWithGoogle, isAuthenticated } from "@/lib/auth";
+import { useState, useEffect } from "react";
 import { CheckCircle, AlertCircle, Eye, EyeOff } from "lucide-react";
 
 const schema = z.object({
@@ -19,10 +19,23 @@ type Form = z.infer<typeof schema>;
 
 export default function Auth() {
   const location = useLocation();
+  const navigate = useNavigate();
   const from = (location.state as any)?.from?.pathname as string | undefined;
   const urlParams = new URLSearchParams(location.search);
   const mode = urlParams.get('mode');
   const defaultTab = mode === 'reset' ? 'reset' : 'signin';
+
+  // Check if user is already authenticated (e.g., after Google OAuth redirect)
+  useEffect(() => {
+    const checkAuth = async () => {
+      if (await isAuthenticated()) {
+        // Redirect to the intended page or homepage
+        navigate(from || '/', { replace: true });
+      }
+    };
+    
+    checkAuth();
+  }, [navigate, from]);
   
   return (
     <div className="max-w-md mx-auto">

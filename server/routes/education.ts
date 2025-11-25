@@ -73,7 +73,14 @@ router.get('/', async (req, res) => {
 // GET /api/education/:id - Get specific educational content
 router.get('/:id', async (req, res) => {
   try {
-    const userId = getUserIdFromAuth(req.headers.authorization);
+    // Educational content is publicly accessible - auth is optional
+    let userId = null;
+    try {
+      userId = getUserIdFromAuth(req.headers.authorization);
+    } catch (error) {
+      // No auth token provided - that's fine for public content
+    }
+    
     const { id } = req.params;
 
     const { data: content, error } = await supabase

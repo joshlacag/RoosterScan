@@ -125,10 +125,26 @@ class ApiClient {
     return this.request<Rooster[]>("/roosters");
   }
 
-  async createRooster(data: CreateRoosterRequest): Promise<Rooster> {
+  async createRooster(data: CreateRoosterRequest & { avatarFile?: File }): Promise<Rooster> {
+    let roosterData = { ...data };
+    
+    // If there's an avatar file, upload it first
+    if (data.avatarFile) {
+      try {
+        const uploadResult = await this.uploadImage(data.avatarFile);
+        roosterData.avatarImageUrl = uploadResult.url;
+      } catch (error) {
+        console.error('Failed to upload avatar image:', error);
+        throw new Error('Failed to upload avatar image');
+      }
+      
+      // Remove the file from the data before sending to server
+      delete (roosterData as any).avatarFile;
+    }
+    
     return this.request<Rooster>("/roosters", {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(roosterData),
     });
   }
 
@@ -211,11 +227,34 @@ class ApiClient {
     const formData = new FormData();
     formData.append('image', file);
     
-    // Use the request method to include all headers
-    return this.request<{ url: string }>("/upload", {
+    const session = await getSession();
+    const headers: HeadersInit = {
+      "ngrok-skip-browser-warning": "true",
+      "User-Agent": "Mozilla/5.0",
+    };
+
+    // Add Supabase JWT token if user is authenticated
+    if (session?.access_token) {
+      headers["Authorization"] = `Bearer ${session.access_token}`;
+    }
+
+    // Don't set Content-Type for FormData - let browser set it with boundary
+    const url = `${API_BASE}/upload`;
+    
+    const response = await fetch(url, {
       method: 'POST',
-      body: formData
+      headers,
+      body: formData,
+      credentials: 'include',
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || `HTTP ${response.status}`);
+    }
+
+    const result: ApiResponse<{ url: string }> = await response.json();
+    return result.data;
   }
 
   // Educational Content API methods
