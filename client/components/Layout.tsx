@@ -12,7 +12,7 @@ import type { User } from "@supabase/supabase-js";
 const nav = [
   { to: "/", label: "Home", icon: Home, public: true },
   { to: "/gamefowl", label: "My Gamefowl", icon: Bird, public: false },
-  { to: "/pose", label: "AI Pose Analysis", icon: Scan, public: false },
+  { to: "/pose", label: "Analyze Rooster", icon: Scan, public: false },
   { to: "/history", label: "Scan History", icon: History, public: false },
   { to: "/learn", label: "Educational Hub", icon: Library, public: true },
   { to: "/settings", label: "Settings", icon: Settings, public: false },

@@ -166,7 +166,7 @@ export default function RoosterPoseVisualization() {
       <div className="absolute inset-x-0 bottom-0 flex justify-between text-xs text-white/70 px-6 pb-4">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
-          <span>17 Keypoints</span>
+          <span>4 Injury Types</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
@@ -174,7 +174,7 @@ export default function RoosterPoseVisualization() {
         </div>
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-          <span>Sequential Validation</span>
+          <span>Health Classification</span>
         </div>
       </div>
 

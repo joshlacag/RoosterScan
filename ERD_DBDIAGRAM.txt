@@ -1,0 +1,160 @@
+// RoosterScan Database ERD - 6 Active Tables
+// Paste this code into https://dbdiagram.io/
+
+Table users {
+  id uuid [pk, note: 'Primary key, managed by Supabase Auth']
+  email text [unique, not null]
+  password text [not null, note: 'Hashed password']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  Note: 'User authentication and account management (Supabase Auth)'
+}
+
+Table roosters {
+  id uuid [pk, default: `uuid_generate_v4()`]
+  user_id uuid [ref: > users.id, not null, note: 'Owner of the rooster']
+  name text [not null]
+  breed text
+  age_months integer
+  weight_grams integer
+  color text
+  gender text [note: 'male or female']
+  status text [default: 'active', note: 'active, retired, or deceased']
+  avatar_image_url text
+  notes text
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  Note: 'Rooster profiles managed by users'
+}
+
+Table scans {
+  id uuid [pk, default: `uuid_generate_v4()`]
+  user_id uuid [ref: > users.id, not null]
+  rooster_id uuid [ref: > roosters.id, not null]
+  session_name text
+  scan_type text [default: 'live_video', note: 'live_video, recorded_video, or image_sequence']
+  video_url text
+  thumbnail_url text
+  status text [default: 'processing', note: 'processing, completed, failed, or archived']
+  
+  // AI Analysis Results
+  pose_data jsonb [note: 'Pose estimation keypoints and confidence scores']
+  injury_detections jsonb [note: 'Array of detected injuries with confidence']
+  analysis_confidence real [note: 'Overall AI confidence (0-1)']
+  
+  // Technical metadata
+  model_version text
+  processing_time_ms integer
+  
+  notes text
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  Note: 'Individual scanning sessions with AI analysis results'
+}
+
+Table treatments {
+  id uuid [pk, default: `uuid_generate_v4()`]
+  injury_type text [unique, not null, note: 'bumblefoot, wing_injury, comb_damage, feather_loss, healthy']
+  title text [not null]
+  description text
+  
+  // 4-Phase Treatment Structure
+  phase1_title text [not null, note: 'e.g., Immediate First Aid']
+  phase1_actions text[] [not null, note: 'Array of action steps']
+  phase2_title text [not null, note: 'e.g., Veterinary Treatment']
+  phase2_actions text[] [not null]
+  phase3_title text [not null, note: 'e.g., Home Care & Recovery']
+  phase3_actions text[] [not null]
+  phase4_title text [not null, note: 'e.g., Prevention']
+  phase4_actions text[] [not null]
+  
+  // Metadata
+  severity_level text [note: 'mild, moderate, or severe']
+  estimated_recovery_days integer
+  requires_vet boolean [default: true]
+  is_active boolean [default: true]
+  
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  Note: 'Treatment protocols for each injury type (linked to scans by injury_type)'
+}
+
+Table educational_content {
+  id uuid [pk, default: `uuid_generate_v4()`]
+  title text [not null]
+  content_type text [note: 'article, video, interactive_3d, or quiz']
+  category text [note: 'anatomy, injury_prevention, treatment, breeding, or nutrition']
+  
+  // Content data
+  content_text text
+  media_urls jsonb [note: 'Array of image/video URLs']
+  
+  // Metadata
+  difficulty_level text [note: 'beginner, intermediate, or advanced']
+  estimated_read_time integer [note: 'Reading time in minutes']
+  tags text[]
+  view_count integer [default: 0]
+  
+  // Publishing
+  is_published boolean [default: false]
+  author_id uuid [ref: > users.id]
+  
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  Note: 'Educational hub content (articles, videos, quizzes)'
+}
+
+Table health_reports {
+  id uuid [pk, default: `uuid_generate_v4()`]
+  scan_id uuid [ref: > scans.id, not null]
+  rooster_id uuid [ref: > roosters.id, not null]
+  user_id uuid [ref: > users.id, not null]
+  
+  // Report content
+  title text [not null]
+  summary text
+  detailed_analysis text
+  recommendations text
+  
+  // Overall health metrics
+  overall_health_score real [note: 'Score 0-100']
+  mobility_score real [note: 'Score 0-100']
+  posture_score real [note: 'Score 0-100']
+  
+  // Injury summary
+  total_injuries_detected integer [default: 0]
+  high_priority_injuries integer [default: 0]
+  
+  // Report metadata
+  report_type text [default: 'automated', note: 'automated, manual, or hybrid']
+  status text [default: 'draft', note: 'draft, final, or archived']
+  
+  // File attachments
+  pdf_url text
+  images jsonb [note: 'Array of image URLs']
+  
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+  
+  Note: 'Comprehensive health reports generated from scans'
+}
+
+// Note about treatments relationship:
+// treatments.injury_type is matched with scans.injury_detections (JSONB field)
+// This is a logical relationship, not a foreign key constraint
+// Example: If scan detects "bumblefoot", frontend fetches treatment WHERE injury_type = 'bumblefoot'
+
+// Relationships Summary:
+// - users (1) -> (N) roosters
+// - users (1) -> (N) scans
+// - users (1) -> (N) educational_content (as author)
+// - users (1) -> (N) health_reports
+// - roosters (1) -> (N) scans
+// - roosters (1) -> (N) health_reports
+// - scans (1) -> (N) health_reports
+// - scans.injury_detections (JSONB) ~~> treatments.injury_type (logical link, not FK)

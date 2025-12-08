@@ -38,6 +38,7 @@ export default function ScanResults() {
   const [scan, setScan] = useState<Scan | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedTreatment, setExpandedTreatment] = useState(false);
+  const [treatmentProtocol, setTreatmentProtocol] = useState<any | null>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -51,6 +52,21 @@ export default function ScanResults() {
       setLoading(true);
       const scanData = await api.getScan(id);
       setScan(scanData);
+      
+      // Load treatment protocol from database based on injury type
+      const healthStatus = scanData.poseData?.health_assessment || 
+                          scanData.poseData?.healthAssessment || 
+                          scanData.injuryDetections?.[0] || 
+                          'healthy';
+      
+      try {
+        const treatment = await api.getTreatmentByType(healthStatus.toLowerCase());
+        setTreatmentProtocol(treatment);
+      } catch (error) {
+        console.error('Failed to load treatment protocol:', error);
+        // Fallback to hardcoded if database fetch fails
+        setTreatmentProtocol(null);
+      }
       
       const imageUrl = scanData.poseData?.imageUrl;
       const keypoints = scanData.poseData?.keypoints;
@@ -368,7 +384,33 @@ export default function ScanResults() {
     }
   };
 
-  const treatmentGuide = getTreatmentGuide(healthStatus);
+  // Use database treatment protocol if available, otherwise fall back to hardcoded
+  const treatmentGuide = treatmentProtocol ? {
+    title: treatmentProtocol.title,
+    icon: <Pill className="h-5 w-5" />,
+    steps: [
+      {
+        title: treatmentProtocol.phase1_title,
+        icon: <Shield className="h-4 w-4" />,
+        actions: treatmentProtocol.phase1_actions
+      },
+      {
+        title: treatmentProtocol.phase2_title,
+        icon: <Stethoscope className="h-4 w-4" />,
+        actions: treatmentProtocol.phase2_actions
+      },
+      {
+        title: treatmentProtocol.phase3_title,
+        icon: <Home className="h-4 w-4" />,
+        actions: treatmentProtocol.phase3_actions
+      },
+      {
+        title: treatmentProtocol.phase4_title,
+        icon: <Heart className="h-4 w-4" />,
+        actions: treatmentProtocol.phase4_actions
+      }
+    ]
+  } : getTreatmentGuide(healthStatus);
 
   return (
     <div className="max-w-6xl mx-auto space-y-4 sm:space-y-6 p-4 sm:p-0">

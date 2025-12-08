@@ -67,7 +67,7 @@ export default function Index() {
               Rooster Scan
             </h1>
             <p className="text-sm sm:text-base md:text-lg text-muted-foreground">
-              Smart health monitoring for your roosters. Simply upload a photo to get comprehensive AI-powered health insights, pose analysis, and professional care recommendations.
+              AI-powered injury detection for gamefowl. Upload a photo to identify bumblefoot, wing injuries, comb damage, and feather loss with instant treatment recommendations.
             </p>
             <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 sm:gap-3">
               <Button asChild size="lg" className="w-full sm:w-auto">
@@ -80,15 +80,15 @@ export default function Index() {
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
-                <span>Custom YOLO pose detection</span>
+                <span>AI-powered injury detection</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
-                <span>Sequential AI validation</span>
+                <span>Multi-class classification</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
-                <span>17 anatomical keypoints</span>
+                <span>4 common injury types</span>
               </li>
               <li className="flex items-center gap-2">
                 <span className="text-primary">✓</span>
@@ -107,7 +107,7 @@ export default function Index() {
       {/* Dashboard cards */}
       <section>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <FeatureCard icon={<Camera className="text-rose-500" />} title="AI Pose Analysis" desc="Upload images for 17-keypoint pose detection and health classification." to="/pose"/>
+          <FeatureCard icon={<Camera className="text-rose-500" />} title="Health Analysis" desc="Upload images for AI-powered injury detection and health classification." to="/pose"/>
           <FeatureCard icon={<Bird className="text-amber-600" />} title="My Gamefowl" desc="Create profiles, attach scans, and track care routines." to="/gamefowl"/>
           <FeatureCard icon={<History className="text-rose-500" />} title="Scan History" desc="Review analysis results, track health progress over time." to="/history"/>
           <FeatureCard icon={<GraduationCap className="text-amber-600" />} title="Educational Hub" desc="Learn about rooster anatomy and health monitoring techniques." to="/learn"/>

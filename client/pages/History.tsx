@@ -219,7 +219,8 @@ export default function History() {
                 </Link>
               </Button>
             </div>
-            <Button onClick={exportCsv} size="sm" className="w-full sm:w-auto">
+            {/* Temporarily hidden - Export button */}
+            {/* <Button onClick={exportCsv} size="sm" className="w-full sm:w-auto">
               <Download className="mr-1 h-4 w-4" /> 
               <span className="hidden sm:inline">
                 Export {selectedRoosterId ? roosters[selectedRoosterId] : 'All'} Report
@@ -227,7 +228,7 @@ export default function History() {
               <span className="sm:hidden">
                 Export {selectedRoosterId ? 'Selected' : 'All'}
               </span>
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

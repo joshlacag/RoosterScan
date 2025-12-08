@@ -113,44 +113,36 @@ const QUIZ = [
 
 const GLOSSARY: { term: string; def: string }[] = [
   // From Article 1: Understanding Rooster Anatomy
-  { term: "Keypoints", def: "The 17 specific anatomical points that RoosterScan detects on a rooster for pose analysis." },
-  { term: "Pose Estimation", def: "AI technique that identifies the position of body parts in an image to assess posture and health." },
   { term: "Symmetry", def: "Balance between left and right body parts; asymmetry often indicates injury or illness." },
-  { term: "Keel Bone", def: "The breastbone (chest point #5); important for assessing body condition and muscle health." },
+  { term: "Keel Bone", def: "The breastbone; important for assessing body condition and muscle health." },
   { term: "Wing Droop", def: "One wing hanging lower than the other, indicating potential wing injury or muscle weakness." },
-  { term: "Gait", def: "Pattern of walking; analyzed through leg keypoints to detect limping or balance issues." },
+  { term: "Gait", def: "Pattern of walking; observed to detect limping or balance issues." },
   
   // From Article 2: Photography
-  { term: "Profile View", def: "Side view of the rooster; optimal camera angle for AI pose detection (highest accuracy)." },
+  { term: "Profile View", def: "Side view of the rooster; optimal camera angle for AI health classification (highest accuracy)." },
   { term: "Framing", def: "Positioning the rooster in the photo with full body visible and proper margins around edges." },
   { term: "Resolution", def: "Image quality measured in pixels; higher resolution (1080p+) improves AI detection accuracy." },
   { term: "Diffused Light", def: "Soft, even lighting without harsh shadows; ideal for rooster photography (overcast days or indirect sun)." },
   
   // From Article 3: Health Signs
-  { term: "Comb", def: "Fleshy crest on top of head (keypoint #3); color and texture indicate overall health status." },
+  { term: "Comb", def: "Fleshy crest on top of head; color and texture indicate overall health status." },
   { term: "Wattles", def: "Fleshy lobes hanging from throat; should be vibrant red and warm to touch when healthy." },
   { term: "Molting", def: "Natural seasonal feather loss and regrowth; roosters may appear scruffy and less active during this period." },
   { term: "Bumblefoot", def: "Bacterial infection of the foot pad causing swelling and limping; detected through altered weight distribution." },
   { term: "Palpation", def: "Physical examination by touch to check for tenderness, swelling, or abnormalities in muscles and bones." },
   
   // From Article 4: AI Technology
-  { term: "YOLO", def: "You Only Look Once - fast AI detection model used by RoosterScan to identify roosters and keypoints." },
-  { term: "Confidence Score", def: "Percentage (0-100%) indicating how certain the AI is about a detection; higher scores mean more reliable results." },
-  { term: "Sequential Validation", def: "RoosterScan's two-stage process: pose detection first, then health classification only if quality is sufficient." },
-  { term: "Transfer Learning", def: "Training technique where RoosterScan builds on existing animal pose models, improving accuracy with less data." },
-  { term: "Quality Gates", def: "Minimum thresholds (65% confidence) that detections must meet before proceeding to health assessment." },
-  
-  // From Article 5: Confidence Scores
-  { term: "Threshold", def: "Minimum confidence level (65%) required for AI to proceed with health classification." },
+  { term: "YOLO", def: "You Only Look Once - fast AI detection model used by RoosterScan for health classification." },
+  { term: "Confidence Score", def: "Percentage (0-100%) indicating how certain the AI is about a classification; higher scores mean more reliable results." },
+  { term: "Transfer Learning", def: "Training technique where RoosterScan builds on existing animal health models, improving accuracy with less data." },
   { term: "Image Preprocessing", def: "AI adjustments to brightness, contrast, and size before analysis to improve detection accuracy." },
-  { term: "Keypoint Confidence", def: "Individual confidence score for each of the 17 anatomical points detected by the AI." },
   
   // General Health Terms
   { term: "Atrophy", def: "Muscle wasting from injury, nerve damage, or disuse; visible as reduced muscle mass in affected area." },
   { term: "ROM", def: "Range of Motion - how far a joint can move; compared between left and right sides to detect injuries." },
   { term: "Tarsus", def: "Lower leg segment between knee and foot; common site for sprains, fractures, or bumblefoot." },
-  { term: "Primary Feathers", def: "Long outer wing feathers (keypoints 10-11); their position indicates wing health and carriage." },
-  { term: "Scoliosis", def: "Abnormal spinal curvature causing body imbalance; detected through misaligned back keypoints (4-6-7)." },
+  { term: "Primary Feathers", def: "Long outer wing feathers; their position indicates wing health and carriage." },
+  { term: "Scoliosis", def: "Abnormal spinal curvature causing body imbalance; detected through visual assessment." },
 ];
 
 const HOTSPOT_VERSION = "v2"; // Increment this when DEFAULT_PARTS changes

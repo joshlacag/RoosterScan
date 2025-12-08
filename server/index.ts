@@ -6,6 +6,7 @@ import { uploadImage, uploadMiddleware } from './routes/upload';
 import { getScans, getScanById, createScan, deleteScan, clearAllScans } from "./routes/scans";
 import { getReports, createReport } from "./routes/reports";
 import { getSession, requireAuth } from "./routes/auth";
+import { getTreatments, getTreatmentByType } from "./routes/treatments";
 import educationRoutes from "./routes/education";
 import poseRoutes from "./routes/pose";
 
@@ -64,6 +65,10 @@ export function createServer() {
   // Report routes
   app.get("/api/reports", getReports);
   app.post("/api/reports", requireAuth, createReport);
+
+  // Treatment routes (public access - no auth required)
+  app.get("/api/treatments", getTreatments);
+  app.get("/api/treatments/:injuryType", getTreatmentByType);
 
   // Education routes
   app.use("/api/education", educationRoutes);

@@ -287,6 +287,17 @@ class ApiClient {
   async getUserProgress(): Promise<UserProgress[]> {
     return this.request<UserProgress[]>("/api/education/user/progress");
   }
+
+  // Treatment Protocol API methods
+  async getTreatments(): Promise<any[]> {
+    const response = await this.request<ApiResponse<any[]>>("/treatments");
+    return response.data;
+  }
+
+  async getTreatmentByType(injuryType: string): Promise<any> {
+    const response = await this.request<ApiResponse<any>>(`/treatments/${injuryType}`);
+    return response.data;
+  }
 }
 
 export const api = new ApiClient();

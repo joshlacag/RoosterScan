@@ -440,7 +440,7 @@ export default function PoseAnalysis() {
 
       // Prepare scan data from AI results
       const scanData = {
-        roosterId: null,
+        roosterId: selectedRoosterId || null,
         results: {
           imageUrl: imageDataUrl,
           posture: 'analyzed',
@@ -509,7 +509,7 @@ export default function PoseAnalysis() {
           return maxConfidence > 0.8 ? 'high' as const : 
                  maxConfidence > 0.6 ? 'medium' as const : 'low' as const;
         })(),
-        notes: `AI Pose Analysis - ${result.pose_detection?.keypoints_detected || 0} keypoints detected`,
+        notes: `Health Analysis - ${result.injury_classification?.classification || result.combined_analysis?.health_assessment || 'Analyzed'}`,
         duration: Math.round((result.pose_detection?.processing_time || result.processing_time_estimate || 2500) / 1000)
       };
 
@@ -707,70 +707,70 @@ export default function PoseAnalysis() {
             <Camera className="w-8 h-8 text-primary-foreground" />
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-foreground mb-3">
-            AI Pose Analysis
+            Rooster Health Analysis
           </h1>
           <p className="text-sm sm:text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-            Upload a rooster image for automated pose detection and health analysis
+            Upload a rooster image for AI-powered injury detection and health assessment
           </p>
           
           {/* Instructions - Enhanced */}
           <div className="max-w-3xl mx-auto bg-primary/5 border border-primary/20 rounded-lg p-5">
             <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
               <Info className="h-4 w-4 text-primary" />
-              How to Get Best Results
+              Photography Guidelines for Best Results
             </h3>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
               <div className="flex items-start gap-2">
                 <span className="text-primary font-bold text-base">✓</span>
                 <div>
-                  <strong className="text-foreground">Side view (Profile):</strong>
+                  <strong className="text-foreground">Close-up shots preferred:</strong>
                   <p className="text-muted-foreground text-xs mt-0.5">
-                    Capture from the side at 90° angle. Shows all 17 keypoints clearly (head, wings, legs, tail).
+                    Focus on the specific area of concern (feet for bumblefoot, wings for injuries, head for comb damage).
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-primary font-bold text-base">✓</span>
                 <div>
-                  <strong className="text-foreground">Good lighting:</strong>
+                  <strong className="text-foreground">Proper distance:</strong>
                   <p className="text-muted-foreground text-xs mt-0.5">
-                    Natural daylight or bright indoor lighting. Avoid shadows on the rooster's body.
+                    Get close (1-2 feet) to capture injury details clearly. Fill the frame with the affected area.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-primary font-bold text-base">✓</span>
                 <div>
-                  <strong className="text-foreground">Full body visible:</strong>
+                  <strong className="text-foreground">Sharp focus:</strong>
                   <p className="text-muted-foreground text-xs mt-0.5">
-                    Include entire rooster from beak to tail tip. Don't crop out wings, legs, or head.
+                    Tap to focus on your phone camera. Ensure the injury or affected area is in sharp focus.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-primary font-bold text-base">✓</span>
                 <div>
-                  <strong className="text-foreground">Clear background:</strong>
+                  <strong className="text-foreground">Bright, even lighting:</strong>
                   <p className="text-muted-foreground text-xs mt-0.5">
-                    Plain, contrasting background (grass, concrete, or solid color). Avoid clutter.
+                    Natural daylight works best. Avoid harsh shadows or dark areas on the injury.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-primary font-bold text-base">✓</span>
                 <div>
-                  <strong className="text-foreground">Camera distance:</strong>
+                  <strong className="text-foreground">Multiple angles:</strong>
                   <p className="text-muted-foreground text-xs mt-0.5">
-                    Stand 3-5 feet (1-1.5 meters) away. Rooster should fill 60-80% of the frame.
+                    Take 2-3 photos from different angles of the same area for better detection accuracy.
                   </p>
                 </div>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-primary font-bold text-base">✓</span>
                 <div>
-                  <strong className="text-foreground">Rooster posture:</strong>
+                  <strong className="text-foreground">Keep rooster still:</strong>
                   <p className="text-muted-foreground text-xs mt-0.5">
-                    Natural standing position. Wait for rooster to stand still (not walking or jumping).
+                    Hold the rooster gently or wait until calm. Blurry images reduce accuracy.
                   </p>
                 </div>
               </div>
@@ -778,7 +778,7 @@ export default function PoseAnalysis() {
             <div className="mt-4 pt-3 border-t border-primary/20">
               <p className="text-xs text-muted-foreground flex items-start gap-2">
                 <AlertTriangle className="h-3.5 w-3.5 text-amber-500 flex-shrink-0 mt-0.5" />
-                <span><strong className="text-foreground">Tip:</strong> Close-up images of specific areas (feet, wings, head) also work for detailed inspection!</span>
+                <span><strong className="text-foreground">Important:</strong> Close-up images of the specific injury area work best! The AI is trained to detect bumblefoot (feet), wing injuries, comb damage, and feather loss from detailed close-up photos.</span>
               </p>
             </div>
           </div>
@@ -879,7 +879,7 @@ export default function PoseAnalysis() {
                   ) : (
                     <>
                       <Camera className="w-4 h-4" />
-                      Analyze Pose
+                      Analyze Health
                     </>
                   )}
                 </button>
@@ -986,59 +986,14 @@ export default function PoseAnalysis() {
                       ref={canvasRef}
                       className="w-full h-auto"
                     />
-                    {/* Gradient overlay at bottom - Only show if keypoints detected */}
-                    {(result.keypoints?.filter(kp => kp.confidence > 0.5).length || 0) > 0 ? (
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6">
-                        <div className="flex items-center justify-between text-white">
-                          <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-2">
-                              <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg">
-                                <Target className="h-5 w-5" />
-                              </div>
-                              <div>
-                                <div className="text-2xl font-bold">
-                                  {result.keypoints?.filter(kp => kp.confidence > 0.5).length || 0}/17
-                                </div>
-                                <div className="text-xs text-white/70">Keypoints</div>
-                              </div>
-                            </div>
-                            <div className="h-12 w-px bg-white/20" />
-                            <div className="flex items-center gap-2">
-                              <div className="p-2 bg-white/10 backdrop-blur-sm rounded-lg">
-                                <TrendingUp className="h-5 w-5" />
-                              </div>
-                              <div>
-                                <div className="text-2xl font-bold">
-                                  {result.confidence ? (result.confidence * 100).toFixed(0) : 0}%
-                                </div>
-                                <div className="text-xs text-white/70">Confidence</div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="px-4 py-2 bg-green-500 rounded-lg font-semibold text-sm shadow-lg">
-                            Analysis Complete
-                          </div>
+                    {/* Simple overlay - Analysis complete */}
+                    <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6">
+                      <div className="flex items-center justify-end text-white">
+                        <div className="px-4 py-2 bg-green-500 rounded-lg font-semibold text-sm shadow-lg">
+                          Analysis Complete
                         </div>
                       </div>
-                    ) : (
-                      /* Close-up analysis badge - Show when no keypoints detected */
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-6">
-                        <div className="flex items-center justify-between text-white">
-                          <div className="flex items-center gap-3">
-                            <div className="p-2 bg-blue-500/20 backdrop-blur-sm rounded-lg">
-                              <Search className="h-5 w-5 text-blue-400" />
-                            </div>
-                            <div>
-                              <div className="text-sm font-semibold">Close-up Analysis</div>
-                              <div className="text-xs text-white/70">Pose detection not available for close-up images</div>
-                            </div>
-                          </div>
-                          <div className="px-4 py-2 bg-green-500 rounded-lg font-semibold text-sm shadow-lg">
-                            Analysis Complete
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1408,7 +1363,8 @@ export default function PoseAnalysis() {
                         >
                           Save to Database
                         </Button>
-                        <Button 
+                        {/* Temporarily hidden - View Full Report button */}
+                        {/* <Button 
                           variant="outline"
                           className="flex-1"
                           onClick={() => {
@@ -1419,7 +1375,7 @@ export default function PoseAnalysis() {
                           disabled={!savedScanId}
                         >
                           View Full Report
-                        </Button>
+                        </Button> */}
                       </div>
                     </div>
                   )}
