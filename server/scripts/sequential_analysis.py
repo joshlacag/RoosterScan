@@ -424,6 +424,16 @@ class SequentialAnalyzer:
                         confidence = float(probs.top1conf.item())
                         all_probs = {names[i]: float(probs.data[i].item()) for i in range(len(names))}
                         
+                        # Confidence threshold check - reject if too low (likely not a rooster)
+                        MINIMUM_CONFIDENCE_THRESHOLD = 0.60  # 60%
+                        if confidence < MINIMUM_CONFIDENCE_THRESHOLD:
+                            return {
+                                'success': False,
+                                'error': 'Invalid image: Please upload a clear image of a rooster. The system detected low confidence, which may indicate the image does not contain a rooster or the image quality is insufficient.',
+                                'confidence': confidence,
+                                'rejection_reason': 'low_confidence'
+                            }
+                        
                         # Return direct classification result
                         return {
                             'success': True,
