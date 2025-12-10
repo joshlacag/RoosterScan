@@ -73,21 +73,25 @@ export default function Settings() {
       <div className="rounded-lg sm:rounded-xl border p-4 sm:p-5 bg-card">
         <h2 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Analysis Preferences</h2>
         <div className="space-y-4">
-          <div className="flex items-start sm:items-center justify-between gap-4">
+          {/* Temporarily hidden - Show Technical Details (pose detection reference) */}
+          {/* <div className="flex items-start sm:items-center justify-between gap-4">
             <div className="flex-1">
               <p className="font-medium text-sm sm:text-base">Show Technical Details</p>
               <p className="text-xs sm:text-sm text-muted-foreground">Display pose keypoints and confidence scores.</p>
             </div>
             <Switch checked={showTechnicalDetails} onCheckedChange={toggleTechnicalDetails} className="flex-shrink-0" />
           </div>
-          <Separator />
-          <div className="flex items-start sm:items-center justify-between gap-4">
+          <Separator /> */}
+          {/* Temporarily hidden - Auto-save toggle (not functional, system always auto-saves) */}
+          {/* <div className="flex items-start sm:items-center justify-between gap-4">
             <div className="flex-1">
               <p className="font-medium text-sm sm:text-base">Auto-save Results</p>
               <p className="text-xs sm:text-sm text-muted-foreground">Automatically save analysis results to database.</p>
             </div>
             <Switch checked={autoSave} onCheckedChange={toggleAutoSave} className="flex-shrink-0" />
-          </div>
+          </div> */}
+          {/* Analysis Preferences section now empty - keeping structure for future settings */}
+          <p className="text-sm text-muted-foreground text-center py-4">No preferences available at this time.</p>
         </div>
       </div>
 

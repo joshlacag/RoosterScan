@@ -978,7 +978,7 @@ export default function PoseAnalysis() {
               {/* Pose Analysis - Clean Layout */}
               <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-medium text-foreground mb-4">Pose Detection</h3>
+                  {/* Pose Detection heading removed */}
                   
                   {/* Hero Image with Gradient Overlay */}
                   <div className="relative rounded-xl overflow-hidden shadow-2xl mb-8">
