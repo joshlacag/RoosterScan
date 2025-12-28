@@ -192,14 +192,14 @@ router.post('/detect', upload.single('image'), async (req, res) => {
       });
     }
 
-    // Check if bumblefoot model exists (using the perfect 100% accuracy model)
-    const bumblefootModelPath = path.join(process.cwd(), 'rooster_bumblefoot_model.pt');
+    // Check if injury classification model exists (6-class model with not_rooster rejection)
+    const injuryModelPath = path.join(process.cwd(), 'rooster_injury_6class_model.pt');
     const sequentialScriptPath = path.join(process.cwd(), 'server/scripts/sequential_analysis.py');
     
-    if (!fs.existsSync(bumblefootModelPath)) {
+    if (!fs.existsSync(injuryModelPath)) {
       return res.status(500).json({
         success: false,
-        error: 'Bumblefoot classification model not found'
+        error: 'Injury classification model not found'
       });
     }
     
@@ -210,8 +210,8 @@ router.post('/detect', upload.single('image'), async (req, res) => {
       });
     }
 
-    // Execute sequential analysis with bumblefoot model
-    const python = spawn('python', [sequentialScriptPath, imagePath, modelPath, bumblefootModelPath]);
+    // Execute sequential analysis with 6-class injury model
+    const python = spawn('python', [sequentialScriptPath, imagePath, modelPath, injuryModelPath]);
     let output = '';
     let error = '';
 

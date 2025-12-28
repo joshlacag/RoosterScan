@@ -166,6 +166,16 @@ class SequentialAnalyzer:
                 # Get all class probabilities
                 all_probs = {names[i]: float(probs.data[i].item()) for i in range(len(names))}
                 
+                # Check if model detected 'not_rooster' class (6-class model)
+                if pred_class_name == 'not_rooster':
+                    return {
+                        'success': False,
+                        'stage': 'injury_classification',
+                        'error': 'Invalid image: The uploaded image does not appear to be a rooster. Please upload a clear photo of a rooster.',
+                        'confidence': confidence,
+                        'rejection_reason': 'not_rooster_detected'
+                    }
+                
                 # Confidence threshold check - reject if too low (likely not a rooster)
                 MINIMUM_CONFIDENCE_THRESHOLD = 0.60  # 60%
                 if confidence < MINIMUM_CONFIDENCE_THRESHOLD:
@@ -423,6 +433,15 @@ class SequentialAnalyzer:
                         pred_class_name = names[pred_class_idx]
                         confidence = float(probs.top1conf.item())
                         all_probs = {names[i]: float(probs.data[i].item()) for i in range(len(names))}
+                        
+                        # Check if model detected 'not_rooster' class (6-class model)
+                        if pred_class_name == 'not_rooster':
+                            return {
+                                'success': False,
+                                'error': 'Invalid image: The uploaded image does not appear to be a rooster. Please upload a clear photo of a rooster.',
+                                'confidence': confidence,
+                                'rejection_reason': 'not_rooster_detected'
+                            }
                         
                         # Confidence threshold check - reject if too low (likely not a rooster)
                         MINIMUM_CONFIDENCE_THRESHOLD = 0.60  # 60%
