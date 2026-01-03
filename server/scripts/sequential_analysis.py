@@ -177,7 +177,7 @@ class SequentialAnalyzer:
                     }
                 
                 # Confidence threshold check - reject if too low (likely not a rooster)
-                MINIMUM_CONFIDENCE_THRESHOLD = 0.60  # 60%
+                MINIMUM_CONFIDENCE_THRESHOLD = 0.95  # 95%
                 if confidence < MINIMUM_CONFIDENCE_THRESHOLD:
                     return {
                         'success': False,
@@ -444,7 +444,7 @@ class SequentialAnalyzer:
                             }
                         
                         # Confidence threshold check - reject if too low (likely not a rooster)
-                        MINIMUM_CONFIDENCE_THRESHOLD = 0.60  # 60%
+                        MINIMUM_CONFIDENCE_THRESHOLD = 0.95  # 95%
                         if confidence < MINIMUM_CONFIDENCE_THRESHOLD:
                             return {
                                 'success': False,
